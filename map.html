@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BodyHit Markers</title>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDb4uv97bvcpSUuHGZmfiLKlhYMYkuorgk&callback=initMap" async defer></script>
+  <style>
+    #map {
+      height: 500px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script>
+    function initMap() {
+      const map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 48.8566, lng: 2.3522 },
+        zoom: 6,
+      });
+
+      function createMarker({
+        position,
+        map,
+        title,
+        scoring,
+        color,
+        ca,
+        ebitda,
+        result,
+        flag = false,
+        salaryPeople,
+        rentPercentage,
+        commInvestmentPercentage,
+        scoringComm,
+        scoringWithComm,
+        detailedAccounts = false,
+      }) {
+        const marker = new google.maps.Marker({
+          position,
+          map,
+          title,
+          icon: `http://maps.google.com/mapfiles/ms/icons/${color}-dot.png`,
+        });
+
+        let contentString = `
+          <h3>${title}</h3>
+          <p style="color: ${color}; font-weight: bold;">Scoring Global ${scoring}</p>
+          <p>CA : ${ca}</p>
+          <p>EBITDA : ${ebitda}</p>
+          <p>Résultat : ${result}</p>`;
+
+        if (flag) {
+          contentString += `
+            <p style="color: red; font-weight: bold;">&#x1F6A9;Attention FP < 1/2 du capital</p>`;
+        }
+
+        if (salaryPeople) {
+          contentString += `
+            <p>Masse salariale : ${salaryPeople} personnes à 30K</p>`;
+        }
+
+        if (rentPercentage) {
+          contentString += `
+            <p>Loyer : ${rentPercentage}% du CA</p>`;
+        }
+
+        if (commInvestmentPercentage) {
+          contentString += `
+            <p>Investissement communication : ${commInvestmentPercentage}% du CA</p>`;
+        }
+
+        if (scoringComm) {
+          contentString += `
+            <p>Scoring Communication : ${scoringComm}</p>`;
+        }
+
+        if (scoringWithComm) {
+          contentString += `
+            <p>Scoring global (avec com) : ${scoringWithComm}</p>`;
+        }
+
+        if (detailedAccounts) {
+          contentString += `
+            <p style="font-style: italic;">Pas de compte détaillée mis à disposition</p>`;
+        }
+
+        const infowindow = new google.maps.InfoWindow({
+          content: contentString,
+        });
+
+        marker.addListener("click", () => {
+          infowindow.open(map, marker);
+        });
+
+        google.maps.event.addListener(map, "click", function () {
+          infowindow.close();
+        });
+      }
+
+      const markers = [
+        {
+          position: { lat: 45.6888, lng: 5.9111 },
+          map,
+          title: "BodyHit Aix-les-Bains",
+          scoring: "2",
+          color: "orange",
+          ca: "4 (142K)",
+          ebitda: "1 (-10K)",
+          result: "1 (1K)",
+          flag: true,
+          salaryPeople: "1.5",
+          detailedAccounts: true,
+        },
+        {
+          position: { lat: 43.5249, lng: 5.4545 },
+          map,
+          title: "BodyHit Aix-les-Milles",
+          scoring: "2",
+          color: "orange",
+          ca: "3 (86K)",
+          ebitda: "1 (-48K)",
+          result: "1 (-75K)",
+          flag: true,
+          salaryPeople: "0.9",
+          rentPercentage: "52",
+          commInvestmentPercentage: "14",
+          scoringComm: "5",
+          scoringWithComm: "3",
+        },
+        {
+          position: { lat: 45.911085, lng: 6.137527 },
+          map,
+          title: "BodyHit Annecy",
+          scoring: "4",
+          color: "green",
+          ca: "5 (171K)",
+          ebitda: "5 (40K)",
+          result: "1 (3K)",
+          salaryPeople: "1.2",
+          rentPercentage: "15",
+          commInvestmentPercentage: "0",
+          scoringComm: "1",
+          scoringWithComm: "3",
+        },
+        {
+          position: { lat: 45.1865, lng: 5.7245 },
+          map,
+          title: "BodyHit Grenoble Peripherie",
+          scoring: "3",
+          color: "blue",
+          ca: "5 (191K)",
+          ebitda: "2 (15K)",
+          result: "1 (1K)",
+          flag: true,
+          salaryPeople: "2",
+          detailedAccounts: true,
+        },
+        {
+          position: { lat: 45.7461, lng: 4.8275 },
+          map,
+          title: "BodyHit Lyon Confluence",
+          scoring: "3",
+          color: "blue",
+          ca: "5 (196K)",
+          ebitda: "2 (10K)",
+          result: "1 (1K)",
+          flag: true,
+          salaryPeople: "1.8",
+          detailedAccounts: true,
+        },
+        {
+          position: { lat: 43.2945, lng: 5.3850 },
+          map,
+          title: "BodyHit Marseille Haxo",
+          scoring: "1",
+          color: "red",
+          ca: "2 (96K)",
+          ebitda: "1 (-46K)",
+          result: "1 (-77K)",
+          flag: true,
+          salaryPeople: "1.5",
+          rentPercentage: "25",
+          commInvestmentPercentage: "13",
+          scoringComm: "5",
+          scoringWithComm: "2",
+        },
+        {
+          position: { lat: 43.3052, lng: 5.3630 },
+          map,
+          title: "BodyHit Marseille La Joliette",
+          scoring: "1",
+          color: "red",
+          ca: "2 (76K)",
+          ebitda: "1 (-68K)",
+          result: "1 (-89K)",
+          flag: true,
+          salaryPeople: "1.2",
+          rentPercentage: "38",
+          commInvestmentPercentage: "14",
+          scoringComm: "5",
+          scoringWithComm: "2",
+        },
+        {
+          position: { lat: 43.2909, lng: 5.3824 },
+          map,
+          title: "BodyHit Marseille Puget",
+          scoring: "3",
+          color: "blue",
+          ca: "4 (122K)",
+          ebitda: "3 (14K)",
+          result: "1 (-18K)",
+          flag: true,
+          salaryPeople: "1",
+          rentPercentage: "23",
+          commInvestmentPercentage: "6",
+          scoringComm: "5",
+          scoringWithComm: "3",
+        },
+        {
+          position: { lat: 47.2431, lng: 6.0182 },
+          map,
+          title: "BodyHit Besançon",
+          scoring: "2",
+          color: "orange",
+          ca: "3 (96K)",
+          ebitda: "1 (-65K)",
+          result: "1 (-91K)",
+          flag: true,
+          salaryPeople: "1.6",
+          detailedAccounts: true,
+        },
+        {
+          position: { lat: 44.8315, lng: -0.6288 },
+          map,
+          title: "BodyHit Bordeaux Chartrons",
+          scoring: "4",
+          color: "green",
+          ca: "5 (175K)",
+          ebitda: "4 (35K)",
+          result: "1 (6K)",
+          salaryPeople: "1.4",
+          rentPercentage: "8",
+          commInvestmentPercentage: "1",
+          scoringComm: "1",
+          scoringWithComm: "3",
+        },
+        {
+          position: { lat: 16.2111, lng: -61.5044 },
+          map,
+          title: "BodyHit Guadeloupe",
+          scoring: "4",
+          color: "green",
+          ca: "5 (303K)",
+          ebitda: "5 (81K)",
+          result: "3 (12K)",
+          salaryPeople: "3.15",
+          rentPercentage: "10",
+          commInvestmentPercentage: "2",
+          scoringComm: "2",
+          scoringWithComm: "4",
+        },
+        {
+          position: { lat: 48.8164, lng: 2.3164 },
+          map,
+          title: "BodyHit Montrouge",
+          scoring: "3",
+          color: "blue",
+          ca: "4 (134K)",
+          ebitda: "4 (21K)",
+          result: "1 (-9K)",
+          flag: true,
+          salaryPeople: "0.5",
+          detailedAccounts: true,
+        },
+        {
+          position: { lat: 47.2173, lng: -1.5534 },
+          map,
+          title: "BodyHit Nantes",
+          scoring: "2",
+          color: "orange",
+          ca: "4 (129K)",
+          ebitda: "1 (-12K)",
+          result: "1 (-30K)",
+          salaryPeople: "1.8",
+          rentPercentage: "10",
+          commInvestmentPercentage: "5",
+          scoringComm: "5",
+          scoringWithComm: "3",
+        },
+        {
+          position: { lat: 47.2174, lng: -1.5616 },
+          map,
+          title: "BodyHit Nantes Graslin",
+          scoring: "2",
+          color: "orange",
+          ca: "4 (136K)",
+          ebitda: "2 (12K)",
+          result: "1 (-10K)",
+          flag: true,
+          salaryPeople: "1.2",
+          rentPercentage: "12",
+          commInvestmentPercentage: "4",
+          scoringComm: "4",
+          scoringWithComm: "3",
+        },
+        {
+          position: { lat: 48.8934, lng: 2.0931 },
+          map,
+          title: "BodyHit Saint Germain",
+          scoring: "2",
+          color: "orange",
+          ca: "4 (152K)",
+          ebitda: "2 (13K)",
+          result: "1 (-8K)",
+          flag: true,
+          salaryPeople: "1.1",
+          rentPercentage: "17",
+          commInvestmentPercentage: "8",
+          scoringComm: "5",
+          scoringWithComm: "3",
+        },
+        {
+          position: { lat: 48.9531, lng: 2.3118 },
+          map,
+          title: "BodyHit Enghien-les-Bains",
+          scoring: "2",
+          color: "orange",
+          ca: "5 (234K)",
+          ebitda: "1 (7K)",
+          result: "1 (-27K)",
+          salaryPeople: "2.23",
+          detailedAccounts: true,
+        },
+        {
+          position: { lat: 48.8807, lng: 2.1864 },
+          map,
+          title: "BodyHit Reuil-Malmaison",
+          scoring: "5",
+          color: "green",
+          ca: "5 (235K)",
+          ebitda: "5 (88K)",
+          result: "5 (35K)",
+          salaryPeople: "0.2",
+          detailedAccounts: true,
+        },
+        {
+          position: { lat: 49.1193, lng: 6.1762 },
+          map,
+          title: "BodyHit Metz",
+          scoring: "2",
+          color: "orange",
+          ca: "4 (137K)",
+          ebitda: "1 (-8K)",
+          result: "1 (-29K)",
+          flag: true,
+          salaryPeople: "1.3",
+          rentPercentage: "9",
+          commInvestmentPercentage: "11",
+          scoringComm: "5",
+          scoringWithComm: "3",
+        },
+        {
+          position: { lat: 43.6406, lng: 5.0962 },
+          map,
+          title: "BodyHit Salon de Provence",
+          scoring: "4",
+          color: "green",
+          ca: "5 (179K)",
+          ebitda: "4 (33K)",
+          result: "4 (15K)",
+          salaryPeople: "1.1",
+          rentPercentage: "10",
+          commInvestmentPercentage: "9",
+          scoringComm: "5",
+          scoringWithComm: "5",
+        },
+        {
+          position: { lat: 47.3941, lng: 0.6889 },
+          map,
+          title: "BodyHit Tours",
+          scoring: "3",
+          color: "blue",
+          ca: "4 (164K)",
+          ebitda: "4 (27K)",
+          result: "1 (-4K)",
+          salaryPeople: "1.5",
+          rentPercentage: "15",
+          commInvestmentPercentage: "0",
+          scoringComm: "1",
+          scoringWithComm: "3",
+        },
+        {
+          position: { lat: 49.2085, lng: 2.5855 },
+          map,
+          title: "BodyHit Senlis",
+          scoring: "4",
+          color: "green",
+          ca: "4 (149K)",
+          ebitda: "4 (30K)",
+          result: "2 (3K)",
+          flag: true,
+          salaryPeople: "0.6",
+          detailedAccounts: true,
+        },
+        {
+          position: { lat: 47.6563, lng: -2.7564 },
+          map,
+          title: "BodyHit Vannes",
+          scoring: "3",
+          color: "blue",
+          ca: "5 (206K)",
+          ebitda: "4 (32K)",
+          result: "1 (1K)",
+          salaryPeople: "1.6",
+          rentPercentage: "11",
+          commInvestmentPercentage: "6",
+          scoringComm: "5",
+          scoringWithComm: "4",
+        },
+        {
+          position: { lat: 44.6216, lng: -1.1408 },
+          map,
+          title: "BodyHit Les Tesle",
+          scoring: "1",
+          color: "red",
+          ca: "2 (63K)",
+          ebitda: "1 (-51K)",
+          result: "1 (-76K)",
+          flag: true,
+          salaryPeople: "0.7",
+          detailedAccounts: true,
+        },
+      ];
+
+      markers.forEach((marker) => createMarker(marker));
+    }
+  </script>
+</body>
+</html>
+
